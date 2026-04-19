@@ -121,25 +121,23 @@ export default function Hero() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 14,
+          gap: 'clamp(6px, 2vw, 14px)',
           margin: '28px auto',
+          width: '100%',
+          maxWidth: '400px',
           opacity: 0,
         }}>
-          <svg width="200" height="2" viewBox="0 0 200 2">
-            <line x1="0" y1="1" x2="200" y2="1" stroke="var(--gold)" strokeWidth="0.5" opacity="0.4" />
-          </svg>
-          <svg width="12" height="12" viewBox="0 0 12 12">
+          <div style={{ flex: 1, height: 1, background: 'var(--gold)', opacity: 0.4 }} />
+          <svg width="12" height="12" viewBox="0 0 12 12" style={{ flexShrink: 0 }}>
             <polygon points="6,0 12,6 6,12 0,6" fill="none" stroke="var(--gold)" strokeWidth="1" />
           </svg>
-          <svg width="16" height="16" viewBox="0 0 16 16">
+          <svg width="16" height="16" viewBox="0 0 16 16" style={{ flexShrink: 0 }}>
             <path d="M8,0 L10,6 L16,8 L10,10 L8,16 L6,10 L0,8 L6,6 Z" fill="var(--gold)" opacity="0.7" />
           </svg>
-          <svg width="12" height="12" viewBox="0 0 12 12">
+          <svg width="12" height="12" viewBox="0 0 12 12" style={{ flexShrink: 0 }}>
             <polygon points="6,0 12,6 6,12 0,6" fill="none" stroke="var(--gold)" strokeWidth="1" />
           </svg>
-          <svg width="200" height="2" viewBox="0 0 200 2">
-            <line x1="0" y1="1" x2="200" y2="1" stroke="var(--gold)" strokeWidth="0.5" opacity="0.4" />
-          </svg>
+          <div style={{ flex: 1, height: 1, background: 'var(--gold)', opacity: 0.4 }} />
         </div>
 
         <p className="hero-subtitle" style={{

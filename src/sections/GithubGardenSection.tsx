@@ -90,34 +90,20 @@ export default function GithubGardenSection() {
             }}
           />
 
-          {/* Stats Overlay inside the canvas box */}
-          <div 
-            style={{
-              position: 'absolute',
-              top: '24px',
-              right: '24px',
-              padding: '24px',
-              pointerEvents: 'none',
-              background: 'rgba(10, 10, 15, 0.75)',
-              border: '1px solid rgba(201, 162, 39, 0.2)',
-              borderRadius: '12px',
-              backdropFilter: 'blur(12px)',
-              minWidth: '240px',
-              color: 'white'
-            }}
-          >
-            <div style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '16px', color: 'var(--gold-muted)' }}>
+          {/* Stats Overlay */}
+          <div className="garden-stats">
+            <div className="garden-stats-title" style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '16px', color: 'var(--gold-muted)' }}>
               Overview
             </div>
             
-            <div style={{ fontSize: '42px', color: 'var(--gold)', fontFamily: 'var(--font-sans)', fontWeight: 800, lineHeight: 1 }}>
+            <div className="garden-stats-value" style={{ fontSize: '42px', color: 'var(--gold)', fontFamily: 'var(--font-sans)', fontWeight: 800, lineHeight: 1 }}>
               {stats.total.toLocaleString()}
             </div>
             <div style={{ fontSize: '12px', marginTop: '4px', marginBottom: '24px', color: 'var(--saffron)' }}>
               total contributions
             </div>
 
-            <div style={{ display: 'flex', gap: '24px' }}>
+            <div className="garden-stats-row" style={{ display: 'flex', gap: '24px' }}>
               <div>
                 <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--magenta)' }}>{stats.maxDay}</div>
                 <div style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--gold-muted)' }}>best day</div>

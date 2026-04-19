@@ -247,4 +247,39 @@ img {
   .section-title {
     font-size: clamp(32px, 8vw, 48px);
   }
+  .garden-stats {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    margin-bottom: 24px;
+    background: transparent !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    min-width: 0 !important;
+  }
+  .garden-stats-title {
+    margin-bottom: 8px !important;
+  }
+  .garden-stats-value {
+    font-size: 32px !important;
+  }
+  .garden-stats-row {
+    gap: 16px !important;
+  }
+}
+
+.garden-stats {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  padding: 24px;
+  pointer-events: none;
+  background: rgba(10, 10, 15, 0.75);
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  min-width: 240px;
+  color: white;
+  z-index: 10;
 }

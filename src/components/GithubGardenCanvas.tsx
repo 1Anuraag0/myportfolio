@@ -164,9 +164,10 @@ export default function GithubGardenCanvas({ year, onDataLoaded }: GithubGardenC
     const offsetX = -totalWidth / 2;
     const offsetZ = -totalDepth / 2;
 
-    const distFactor = Math.min(1.8, Math.max(1, totalWidth / 60)); // Capped so we don't zoom out too far
-    // Brought camera significantly closer and lower for a larger perspective
-    camera.position.set(25 * distFactor, 20 + (distFactor * 5), 35 * distFactor);
+    // Give it a perfectly flat, cinematic front elevation by default
+    const yHeight = Math.max(8, totalWidth * 0.15); 
+    const zDistance = Math.max(30, totalWidth * 0.85);
+    camera.position.set(0, yHeight, zDistance);
     controls.maxDistance = Math.max(120, totalWidth * 1.5);
     controls.target.set(0, 0, 0); // Focus closer to center
     controls.update();

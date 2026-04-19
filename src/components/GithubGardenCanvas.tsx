@@ -220,8 +220,8 @@ export default function GithubGardenCanvas({ year, onDataLoaded }: GithubGardenC
       });
       
       const instancedMesh = new THREE.InstancedMesh(barGeo, mat, cells.length);
-      instancedMesh.castShadow = true;
       instancedMesh.receiveShadow = true;
+      instancedMesh.userData = { cells };
       
       const dummy = new THREE.Object3D();
       
@@ -409,8 +409,13 @@ export default function GithubGardenCanvas({ year, onDataLoaded }: GithubGardenC
 
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
+    let isDragging = false;
+    controls.addEventListener('start', () => { isDragging = true; tooltip.style.display = 'none'; });
+    controls.addEventListener('end', () => { isDragging = false; });
 
     const onPointerMove = (e: MouseEvent) => {
+      if (isDragging) return;
+
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -422,32 +427,17 @@ export default function GithubGardenCanvas({ year, onDataLoaded }: GithubGardenC
         const intersects = raycaster.intersectObject(mesh);
         if (intersects.length > 0) {
           const instanceId = intersects[0].instanceId;
-          if (instanceId !== undefined) {
-            const point = intersects[0].point;
-            let closestKey = null;
-            let closestDist = Infinity;
-            
-            for (const [key, val] of barDataMap) {
-              const dx = point.x - val.x;
-              const dz = point.z - val.z;
-              const dist = dx * dx + dz * dz;
-              if (dist < closestDist) {
-                closestDist = dist;
-                closestKey = key;
-              }
-            }
-            
-            if (closestKey && closestDist < 1) {
-              const cellData = barDataMap.get(closestKey).cell;
-              tooltip.style.display = 'block';
-              tooltip.style.left = (e.clientX - rect.left + 15) + 'px';
-              tooltip.style.top = (e.clientY - rect.top - 10) + 'px';
-              tooltip.innerHTML = `
-                <div style="font-size: 13px; font-weight: 700; color: #ffd700;">${cellData.count} contributions</div>
-                <div style="font-size: 11px; color: #8b8b9e; margin-top: 2px;">${cellData.dayName}, ${cellData.date}</div>
-              `;
-              found = true;
-            }
+          if (instanceId !== undefined && mesh.userData.cells) {
+            const cellData = mesh.userData.cells[instanceId].cell;
+            tooltip.style.display = 'block';
+            tooltip.style.left = (e.clientX - rect.left + 15) + 'px';
+            tooltip.style.top = (e.clientY - rect.top - 10) + 'px';
+            tooltip.innerHTML = `
+              <div style="font-size: 13px; font-weight: 700; color: #ffd700;">${cellData.count} contributions</div>
+              <div style="font-size: 11px; color: #8b8b9e; margin-top: 2px;">${cellData.dayName}, ${cellData.date}</div>
+            `;
+            found = true;
+            break;
           }
         }
       }

@@ -20,8 +20,7 @@ export default function Hero() {
       .fromTo('.name-line-2', { opacity: 0, y: 52 }, { opacity: 1, y: 0, duration: 1.1, ease: 'power4.out' }, 0.28)
       .fromTo('.ornament-divider', { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.8 }, 0.45)
       .fromTo('.hero-subtitle', { opacity: 0, y: 52 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.55)
-      .fromTo('.hero-cta .btn', { opacity: 0, y: 52 }, { opacity: 1, y: 0, stagger: 0.12, duration: 0.8, ease: 'power3.out' }, 0.70)
-      .fromTo('.scroll-cue', { opacity: 0 }, { opacity: 1, duration: 1.0 }, 0.90);
+      .fromTo('.hero-cta .btn', { opacity: 0, y: 52 }, { opacity: 1, y: 0, stagger: 0.12, duration: 0.8, ease: 'power3.out' }, 0.70);
 
     // Parallax
     gsap.to('.hero-name', {
@@ -162,11 +161,6 @@ export default function Hero() {
           <a href="#projects" className="btn btn-gold" data-cursor="expand">VIEW MY WORK</a>
           <a href="#contact" className="btn btn-saffron" data-cursor="expand">GET IN TOUCH</a>
         </div>
-      </div>
-
-      <div className="scroll-cue" style={{ opacity: 0 }}>
-        <span>SCROLL</span>
-        <div className="scroll-bar" />
       </div>
     </section>
   );

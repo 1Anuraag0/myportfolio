@@ -1,0 +1,31 @@
+:root {
+  /* Backgrounds */
+  --ink:          #07030F;
+  --deep:         #0D0520;
+  --layer:        #130728;
+  --layer-warm:   #180910;
+
+  /* Gold system */
+  --gold:         #C9A227;
+  --gold-bright:  #F2C94C;
+  --gold-pale:    #F7E4A0;
+  --gold-dim:     rgba(201, 162, 39, 0.10);
+  --gold-border:  rgba(201, 162, 39, 0.22);
+
+  /* Accent colors */
+  --saffron:      #E0690D;
+  --saffron-dim:  rgba(224, 105, 13, 0.14);
+  --crimson:      #8B1C1C;
+  --ivory:        #FDF4E3;
+  --ivory-dim:    #C8B48A;
+  --ivory-ghost:  rgba(253, 244, 227, 0.05);
+
+  /* Typography scale */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-serif:   'Noto Serif', Georgia, serif;
+  --font-sans:    'Noto Sans', system-ui, sans-serif;
+
+  /* Easing */
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-in-out:   cubic-bezier(0.76, 0, 0.24, 1);
+}

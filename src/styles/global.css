@@ -1,0 +1,250 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
+}
+
+body {
+  background-color: var(--ink);
+  color: var(--ivory);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ─── BUTTON SYSTEM ─── */
+.btn {
+  display: inline-block;
+  padding: 16px 40px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.38s var(--ease-out-expo);
+  cursor: none;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-101%);
+  transition: transform 0.42s var(--ease-out-expo);
+  z-index: -1;
+}
+
+.btn-gold {
+  border: 1.5px solid var(--gold);
+  color: var(--gold);
+}
+.btn-gold::before {
+  background: var(--gold);
+}
+.btn-gold:hover {
+  color: var(--ink);
+}
+.btn-gold:hover::before {
+  transform: translateX(0);
+}
+
+.btn-saffron {
+  border: 1.5px solid var(--saffron);
+  color: var(--saffron);
+}
+.btn-saffron::before {
+  background: var(--saffron);
+}
+.btn-saffron:hover {
+  color: var(--ivory);
+}
+.btn-saffron:hover::before {
+  transform: translateX(0);
+}
+
+/* ─── ORNAMENT DIVIDER ─── */
+.ornament-rule {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 40px auto 64px;
+  max-width: 500px;
+}
+.rule-line {
+  height: 1px;
+  flex: 1;
+  max-width: 200px;
+  background: linear-gradient(to right, transparent, rgba(201, 162, 39, 0.4));
+}
+.rule-line--right {
+  background: linear-gradient(to left, transparent, rgba(201, 162, 39, 0.4));
+}
+
+/* ─── SECTION COMMON ─── */
+.section-eye {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.6em;
+  text-transform: uppercase;
+  color: var(--saffron);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(42px, 6vw, 70px);
+  font-weight: 600;
+  color: var(--gold-pale);
+  text-align: center;
+  margin-bottom: 16px;
+}
+.section-title em {
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ivory);
+}
+
+/* ─── SKELETON LOADING ─── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--gold-dim) 25%,
+    rgba(201, 162, 39, 0.06) 50%,
+    var(--gold-dim) 75%
+  );
+  background-size: 200%;
+  animation: skeleton-shimmer 1.4s linear infinite;
+  border-radius: 4px;
+}
+@keyframes skeleton-shimmer {
+  to {
+    background-position: -200%;
+  }
+}
+
+/* ─── SCROLL CUE ─── */
+.scroll-cue {
+  position: absolute;
+  bottom: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.scroll-cue span {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  opacity: 0.6;
+}
+.scroll-bar {
+  width: 1px;
+  height: 58px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: grow-line 2.8s ease-in-out infinite;
+}
+@keyframes grow-line {
+  0%, 100% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
+/* ─── GOLD DUST PARTICLES ─── */
+@keyframes float-up {
+  0% {
+    transform: translateY(110vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.65;
+  }
+  90% {
+    opacity: 0.65;
+  }
+  100% {
+    transform: translateY(-10vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* ─── MARQUEE ─── */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ─── SHIMMER ─── */
+@keyframes shimmer {
+  from {
+    background-position: 0% center;
+  }
+  to {
+    background-position: 250% center;
+  }
+}
+
+/* ─── MANDALA SPIN ─── */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── REDUCED MOTION ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 767px) {
+  body {
+    cursor: auto;
+  }
+  .section-title {
+    font-size: clamp(32px, 8vw, 48px);
+  }
+}

@@ -2,51 +2,16 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer
-      style={{
-        height: 76,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 80px',
-        borderTop: '1px solid rgba(201, 162, 39, 0.1)',
-        position: 'relative',
-        zIndex: 1,
-      }}
-    >
-      <span
-        style={{
-          fontFamily: 'var(--font-sans)',
-          fontSize: 10,
-          letterSpacing: '0.4em',
-          textTransform: 'uppercase' as const,
-          color: 'rgba(201, 162, 39, 0.35)',
-        }}
-      >
+    <footer className="site-footer">
+      <span className="site-footer-text site-footer-text-left">
         © {year}
       </span>
 
-      <span
-        style={{
-          fontFamily: 'var(--font-sans)',
-          fontSize: 10,
-          letterSpacing: '0.4em',
-          textTransform: 'uppercase' as const,
-          color: 'rgba(201, 162, 39, 0.32)',
-        }}
-      >
+      <span className="site-footer-text site-footer-text-center">
         ✦ ANURAG DOLUI · BUILT WITH INTENTION · DESIGNED WITH SOUL ✦
       </span>
 
-      <span
-        style={{
-          fontFamily: 'var(--font-sans)',
-          fontSize: 10,
-          letterSpacing: '0.4em',
-          textTransform: 'uppercase' as const,
-          color: 'rgba(201, 162, 39, 0.35)',
-        }}
-      >
+      <span className="site-footer-text site-footer-text-right">
         KOLKATA, INDIA
       </span>
     </footer>

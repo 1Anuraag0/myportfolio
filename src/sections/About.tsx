@@ -137,31 +137,11 @@ export default function About() {
       style={{
         position: 'relative',
         padding: '120px 48px',
-        background: 'linear-gradient(142deg, var(--layer-warm) 0%, #1A0A1A 100%)',
+        background: 'transparent',
         overflow: 'hidden',
       }}
     >
-      {/* Paisley overlay */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0,
-          pointerEvents: 'none',
-          opacity: 0.038,
-        }}
-      >
-        <svg width="100%" height="100%" style={{ position: 'absolute', inset: 0 }}>
-          <defs>
-            <pattern id="paisley" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-              <path d="M40,100 Q60,40 100,60 Q140,80 120,140 Q100,180 60,160 Q20,140 40,100 Z" fill="none" stroke="var(--gold)" strokeWidth="0.5" />
-              <path d="M140,30 Q160,10 180,30 Q200,50 180,70 Q160,80 140,60 Q130,45 140,30 Z" fill="none" stroke="var(--gold)" strokeWidth="0.5" />
-              <circle cx="100" cy="120" r="4" fill="var(--gold)" opacity="0.3" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#paisley)" />
-        </svg>
-      </div>
+
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 1180, margin: '0 auto' }}>
         <div className="section-eye">✦ THE MAKER ✦</div>

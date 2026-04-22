@@ -46,16 +46,7 @@ export default function Contact() {
       }
     );
 
-    gsap.to('.contact-mandala', {
-      rotation: '+=80',
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '#contact',
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 1.4,
-      },
-    });
+
   }, []);
 
   return (
@@ -64,53 +55,11 @@ export default function Contact() {
       style={{
         position: 'relative',
         padding: '120px 48px',
-        background: 'linear-gradient(145deg, var(--layer-warm), #0E0518)',
+        background: 'transparent',
         overflow: 'hidden',
       }}
     >
-      {/* CSS Mandala background */}
-      <div
-        className="contact-mandala"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          width: 580,
-          height: 580,
-          transform: 'translate(-50%, -50%)',
-          opacity: 0.055,
-          zIndex: 0,
-          animation: 'spin 180s linear infinite',
-        }}
-      >
-        <svg viewBox="0 0 580 580" width="580" height="580">
-          {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-            <circle
-              key={i}
-              cx="290"
-              cy="290"
-              r={60 + i * 35}
-              fill="none"
-              stroke="var(--gold)"
-              strokeWidth={i % 2 === 0 ? 0.8 : 0.5}
-              strokeDasharray={i % 2 === 0 ? 'none' : '8 6'}
-            />
-          ))}
-          {Array.from({ length: 12 }).map((_, i) => (
-            <ellipse
-              key={`petal-${i}`}
-              cx="290"
-              cy="180"
-              rx="14"
-              ry="50"
-              fill="none"
-              stroke="var(--gold)"
-              strokeWidth="0.5"
-              transform={`rotate(${i * 30} 290 290)`}
-            />
-          ))}
-        </svg>
-      </div>
+
 
       <div
         className="contact-content"

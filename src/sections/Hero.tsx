@@ -1,18 +1,56 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import FaultyTerminal from '../components/FaultyTerminal';
+import Hyperspeed from '../components/HyperspeedRenderer';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
 
+  /* Cyberpunk preset — reduced for performance, NO interactivity */
+  const cyberpunkOptions = useMemo(() => ({
+    onSpeedUp: () => {},
+    onSlowDown: () => {},
+    distortion: 'turbulentDistortion',
+    length: 400,
+    roadWidth: 10,
+    islandWidth: 2,
+    lanesPerRoad: 2,
+    totalSideLightSticks: 15,
+    lightPairsPerRoadWay: 20,
+    fov: 90,
+    fovSpeedUp: 90,   // same as fov → no zoom on click
+    speedUp: 0,       // no speed boost on click
+    carLightsFade: 0.4,
+    shoulderLinesWidthPercentage: 0.05,
+    brokenLinesWidthPercentage: 0.1,
+    brokenLinesLengthPercentage: 0.5,
+    lightStickWidth: [0.12, 0.5] as [number, number],
+    lightStickHeight: [1.3, 1.7] as [number, number],
+    movingAwaySpeed: [60, 80] as [number, number],
+    movingCloserSpeed: [-120, -160] as [number, number],
+    carLightsLength: [400 * 0.03, 400 * 0.2] as [number, number],
+    carLightsRadius: [0.05, 0.14] as [number, number],
+    carWidthPercentage: [0.3, 0.5] as [number, number],
+    carShiftX: [-0.8, 0.8] as [number, number],
+    carFloorSeparation: [0, 5] as [number, number],
+    colors: {
+      roadColor: 0x080808,
+      islandColor: 0x0a0a0a,
+      background: 0x000000,
+      shoulderLines: 0x131318,
+      brokenLines: 0x131318,
+      leftCars: [0xd856bf, 0x6750a2, 0xc247ac],
+      rightCars: [0x03b3c3, 0x0e5ea5, 0x324555],
+      sticks: 0x03b3c3,
+    },
+  }), []);
+
   useEffect(() => {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reducedMotion) return;
 
-    // Entrance animation
     const tl = gsap.timeline({ delay: 0.3 });
 
     tl.fromTo('.pre-label', { opacity: 0, y: 52 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0)
@@ -22,7 +60,6 @@ export default function Hero() {
       .fromTo('.hero-subtitle', { opacity: 0, y: 52 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }, 0.55)
       .fromTo('.hero-cta .btn', { opacity: 0, y: 52 }, { opacity: 1, y: 0, stagger: 0.12, duration: 0.8, ease: 'power3.out' }, 0.70);
 
-    // Parallax
     gsap.to('.hero-name', {
       yPercent: 22,
       ease: 'none',
@@ -32,10 +69,6 @@ export default function Hero() {
       yPercent: 14,
       opacity: 0,
       scrollTrigger: { trigger: '#hero', start: 'top top', end: '40% top', scrub: 1 },
-    });
-    gsap.to('.faulty-terminal-bg', {
-      opacity: 0,
-      scrollTrigger: { trigger: '#hero', start: '10% top', end: '60% top', scrub: 0.8 },
     });
 
     return () => {
@@ -60,44 +93,25 @@ export default function Hero() {
         overflow: 'hidden',
       }}
     >
-      {/* FaultyTerminal background — gold-tinted matrix effect */}
+      {/* Hyperspeed 3D background — passive, no interaction */}
       <div
-        className="faulty-terminal-bg"
         style={{
           position: 'absolute',
           inset: 0,
           zIndex: 0,
-          opacity: 0.4,
+          overflow: 'hidden',
           pointerEvents: 'none',
         }}
       >
-        <FaultyTerminal
-          scale={1.5}
-          gridMul={[2, 1]}
-          digitSize={1.2}
-          timeScale={0.3}
-          pause={false}
-          scanlineIntensity={0.4}
-          glitchAmount={0.6}
-          flickerAmount={0.5}
-          noiseAmp={0.8}
-          chromaticAberration={0}
-          dither={0}
-          curvature={0.05}
-          tint="#C9A227"
-          mouseReact={true}
-          mouseStrength={0.3}
-          pageLoadAnimation={true}
-          brightness={0.7}
-          style={{ pointerEvents: 'auto' }}
-        />
+        <Hyperspeed effectOptions={cyberpunkOptions} />
       </div>
 
+      {/* Hero content — on top, fully clickable */}
       <div
         className="hero-content"
         style={{
           position: 'relative',
-          zIndex: 1,
+          zIndex: 10,
           textAlign: 'center',
           padding: '0 24px',
         }}

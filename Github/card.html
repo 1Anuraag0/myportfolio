@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contribution Grid</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+        body {
+            background-color: #020617;
+            /* Deep cinematic black */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            color: #e2e8f0;
+            perspective: 1000px;
+            /* Add depth for 3D hover effects */
+            overflow: hidden;
+            /* Prevent scroll from background orbs */
+            position: relative;
+        }
+
+        /* Ambient background orbs to show off the glassmorphism */
+        body::before,
+        body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+        }
+
+        body::before {
+            top: 5%;
+            left: 20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(74, 222, 128, 0.15);
+            /* Soft green background glow */
+        }
+
+        body::after {
+            bottom: 5%;
+            right: 20%;
+            width: 500px;
+            height: 500px;
+            background: rgba(56, 189, 248, 0.12);
+            /* Soft blue background glow */
+        }
+
+        /* Cinematic Glass Card */
+        .grid-card {
+            background: rgba(255, 255, 255, 0.02);
+            /* Ultra transparent */
+            backdrop-filter: blur(24px) saturate(150%);
+            /* Heavy glass blur and color saturation */
+            -webkit-backdrop-filter: blur(24px) saturate(150%);
+            padding: 32px;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            /* Frosted glass edge */
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .title h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f8fafc;
+            /* Crisp white */
+            letter-spacing: 0.02em;
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .title p {
+            margin: 4px 0 0 0;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 300;
+        }
+
+        .stats {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            text-align: right;
+        }
+
+        .stats strong {
+            color: #4ade80;
+            /* Glowing green */
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+        }
+
+        /* The Grid */
+        .graph-wrapper {
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .graph-container {
+            display: flex;
+            gap: 5px;
+            min-width: max-content;
+        }
+
+        .months {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-bottom: 8px;
+            margin-left: 24px;
+            min-width: max-content;
+            padding-right: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .days-col {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-right: 8px;
+            margin-top: 2px;
+        }
+
+        .day-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            height: 12px;
+            line-height: 12px;
+        }
+
+        .grid {
+            display: flex;
+            gap: 5px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        /* Power On Animation */
+        @keyframes powerOn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) translateY(10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Cinematic Glowing Palette */
+        .cell {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            background-color: rgba(255, 255, 255, 0.015);
+            /* Glassy empty state */
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(4px);
+            /* Inner glassmorphism for empty cells */
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            opacity: 0;
+            /* Handled by animation */
+            animation: powerOn 0.6s ease-out forwards;
+        }
+
+        .cell:hover {
+            transform: scale(1.6) translateZ(10px);
+            z-index: 20;
+            filter: brightness(1.3);
+            border-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Neon Green Glow Levels */
+        .level-1 {
+            background-color: #14532d;
+            border-color: #14532d;
+            box-shadow: 0 0 6px rgba(20, 83, 45, 0.8);
+        }
+
+        .level-2 {
+            background-color: #16a34a;
+            border-color: #16a34a;
+            box-shadow: 0 0 10px rgba(22, 163, 74, 0.8);
+        }
+
+        .level-3 {
+            background-color: #22c55e;
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.9), inset 0 0 2px rgba(255, 255, 255, 0.5);
+        }
+
+        .level-4 {
+            background-color: #4ade80;
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 1), 0 0 40px rgba(74, 222, 128, 0.4), inset 0 0 4px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Footer Legend */
+        .footer {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 20px;
+            font-size: 0.75rem;
+            color: #64748b;
+            gap: 8px;
+        }
+
+        .legend-cell {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            /* Give legends the same power-on animation so they don't pop in instantly */
+            opacity: 0;
+            backdrop-filter: blur(4px);
+            animation: powerOn 1s ease-out 1s forwards;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="grid-card">
+        <div class="header">
+            <div class="title">
+                <h2>GitHub Contributions</h2>
+                <p>Activity & Commit History</p>
+            </div>
+            <div class="stats">
+                1,204 Contributions <br>
+                <strong>Current Streak: 42 Days</strong>
+            </div>
+        </div>
+
+        <div class="graph-wrapper">
+            <div class="months">
+                <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+            </div>
+            <div class="graph-container">
+                <div class="days-col">
+                    <span class="day-label"></span>
+                    <span class="day-label">Mon</span>
+                    <span class="day-label"></span>
+                    <span class="day-label">Wed</span>
+                    <span class="day-label"></span>
+                    <span class="day-label">Fri</span>
+                    <span class="day-label"></span>
+                </div>
+                <div class="grid" id="contributionGrid">
+                    <!-- Grid generated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Less
+            <div class="legend-cell"
+                style="background-color: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.02);"></div>
+            <div class="legend-cell level-1"></div>
+            <div class="legend-cell level-2"></div>
+            <div class="legend-cell level-3"></div>
+            <div class="legend-cell level-4"></div>
+            More
+        </div>
+    </div>
+
+    <script>
+        const gridContainer = document.getElementById('contributionGrid');
+        const weeks = 52;
+        const daysPerWeek = 7;
+
+        // Generate the grid
+        for (let i = 0; i < weeks; i++) {
+            const column = document.createElement('div');
+            column.className = 'column';
+
+            for (let j = 0; j < daysPerWeek; j++) {
+                const cell = document.createElement('div');
+
+                // Randomize activity levels to simulate a busy developer
+                // Weighted towards lower activity to look realistic, with some heavy days
+                const rand = Math.random();
+                let level = '';
+                if (rand > 0.9) level = 'level-4';
+                else if (rand > 0.75) level = 'level-3';
+                else if (rand > 0.5) level = 'level-2';
+                else if (rand > 0.3) level = 'level-1';
+
+                cell.className = `cell ${level}`;
+
+                // Add a sweeping animation delay (left-to-right, top-to-bottom)
+                // This creates the "powering up" cinematic effect
+                const delay = (i * 15) + (j * 20);
+                cell.style.animationDelay = `${delay}ms`;
+
+                // Add a simple title for hover tooltip
+                let contributions = 0;
+                if (level === 'level-1') contributions = Math.floor(Math.random() * 3) + 1;
+                if (level === 'level-2') contributions = Math.floor(Math.random() * 4) + 4;
+                if (level === 'level-3') contributions = Math.floor(Math.random() * 5) + 8;
+                if (level === 'level-4') contributions = Math.floor(Math.random() * 10) + 13;
+
+                cell.title = contributions === 0 ? 'No contributions on this day' : `${contributions} contributions on this day`;
+                column.appendChild(cell);
+            }
+            gridContainer.appendChild(column);
+        }
+    </script>
+
+</body>
+
+</html>

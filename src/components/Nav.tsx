@@ -63,7 +63,7 @@ export default function Nav() {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '0 48px',
-          background: scrolled ? 'rgba(7, 3, 15, 0.88)' : 'transparent',
+          background: scrolled ? '#000000' : 'transparent',
           backdropFilter: scrolled ? 'blur(24px) saturate(160%)' : 'none',
           borderBottom: scrolled ? '1px solid rgba(201, 162, 39, 0.12)' : '1px solid transparent',
           transition: 'all 0.5s var(--ease-out-expo)',

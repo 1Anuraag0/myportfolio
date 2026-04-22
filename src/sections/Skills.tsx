@@ -137,24 +137,11 @@ export default function Skills() {
       style={{
         position: 'relative',
         padding: '120px 48px',
-        background: 'var(--layer)',
+        background: 'transparent',
         overflow: 'hidden',
       }}
     >
-      {/* Diamond grid texture */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: 0,
-          pointerEvents: 'none',
-          opacity: 0.025,
-          backgroundImage: `
-            repeating-linear-gradient( 45deg, var(--gold) 0px, var(--gold) 0.4px, transparent 0.4px, transparent 28px),
-            repeating-linear-gradient(-45deg, var(--gold) 0px, var(--gold) 0.4px, transparent 0.4px, transparent 28px)
-          `,
-        }}
-      />
+
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 920, margin: '0 auto' }}>
         <div className="section-eye">✦ EXPERTISE ✦</div>

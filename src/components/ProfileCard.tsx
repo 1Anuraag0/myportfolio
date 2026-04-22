@@ -452,7 +452,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
     <div
       ref={wrapRef}
       className={`pc-wrap ${className}`.trim()}
-      style={{ position: 'relative', touchAction: 'none', perspective: '500px', transform: 'translate3d(0, 0, 0.1px)', ...cardStyle } as React.CSSProperties}
+      style={{ position: 'relative', touchAction: 'pan-y', perspective: '500px', transform: 'translate3d(0, 0, 0.1px)', ...cardStyle } as React.CSSProperties}
     >
       {behindGlowEnabled && (
         <div

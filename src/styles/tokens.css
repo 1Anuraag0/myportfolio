@@ -1,9 +1,9 @@
 :root {
   /* Backgrounds */
-  --ink:          #07030F;
-  --deep:         #0D0520;
-  --layer:        #130728;
-  --layer-warm:   #180910;
+  --ink:          transparent;
+  --deep:         transparent;
+  --layer:        transparent;
+  --layer-warm:   transparent;
 
   /* Gold system */
   --gold:         #C9A227;

@@ -1,108 +1,134 @@
 import { useEffect, useRef } from 'react';
 
 export default function Cursor() {
-  const ringRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
-  const pos = useRef({ x: 0, y: 0 });
-  const target = useRef({ x: 0, y: 0 });
+  const ringRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Hide on mobile
-    if (window.matchMedia('(max-width: 767px)').matches) return;
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) return;
+
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
+
+    let mouseX = -100;
+    let mouseY = -100;
+    let ringX = -100;
+    let ringY = -100;
+    let isExpanded = false;
 
     const handleMouseMove = (e: MouseEvent) => {
-      target.current = { x: e.clientX, y: e.clientY };
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${e.clientX - 2}px, ${e.clientY - 2}px)`;
-      }
+      mouseX = e.clientX;
+      mouseY = e.clientY;
     };
 
     const handleMouseOver = (e: MouseEvent) => {
-      const el = (e.target as HTMLElement).closest('[data-cursor]');
-      if (!el || !ringRef.current) return;
-      const type = el.getAttribute('data-cursor');
-      if (type === 'expand') {
-        ringRef.current.style.width = '44px';
-        ringRef.current.style.height = '44px';
-        ringRef.current.style.opacity = '0.5';
-      } else if (type === 'text') {
-        ringRef.current.style.width = '2px';
-        ringRef.current.style.height = '28px';
-        ringRef.current.style.borderRadius = '2px';
-      } else if (type === 'link') {
-        ringRef.current.style.borderColor = 'var(--saffron)';
+      const target = e.target as HTMLElement;
+      if (
+        target.closest('[data-cursor="expand"]') ||
+        target.closest('a') ||
+        target.closest('button')
+      ) {
+        isExpanded = true;
+        ring.style.width = '56px';
+        ring.style.height = '56px';
+        ring.style.borderColor = 'var(--saffron)';
+        ring.style.opacity = '1';
+        dot.style.transform = 'translate(-50%, -50%) scale(0.5)';
       }
     };
 
     const handleMouseOut = (e: MouseEvent) => {
-      const el = (e.target as HTMLElement).closest('[data-cursor]');
-      if (!el || !ringRef.current) return;
-      ringRef.current.style.width = '18px';
-      ringRef.current.style.height = '18px';
-      ringRef.current.style.opacity = '1';
-      ringRef.current.style.borderRadius = '50%';
-      ringRef.current.style.borderColor = 'var(--gold)';
+      const target = e.target as HTMLElement;
+      if (
+        target.closest('[data-cursor="expand"]') ||
+        target.closest('a') ||
+        target.closest('button')
+      ) {
+        isExpanded = false;
+        ring.style.width = '36px';
+        ring.style.height = '36px';
+        ring.style.borderColor = 'var(--gold)';
+        ring.style.opacity = '0.5';
+        dot.style.transform = 'translate(-50%, -50%) scale(1)';
+      }
     };
 
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    document.addEventListener('mouseover', handleMouseOver, { passive: true });
-    document.addEventListener('mouseout', handleMouseOut, { passive: true });
+    const handleMouseDown = () => {
+      ring.style.transform = 'translate(-50%, -50%) scale(0.85)';
+    };
+
+    const handleMouseUp = () => {
+      ring.style.transform = 'translate(-50%, -50%) scale(1)';
+    };
 
     let raf: number;
     const animate = () => {
-      pos.current.x += (target.current.x - pos.current.x) * 0.12;
-      pos.current.y += (target.current.y - pos.current.y) * 0.12;
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${pos.current.x - 9}px, ${pos.current.y - 9}px)`;
-      }
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+
+      dot.style.left = mouseX + 'px';
+      dot.style.top = mouseY + 'px';
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+
       raf = requestAnimationFrame(animate);
     };
     raf = requestAnimationFrame(animate);
 
+    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseover', handleMouseOver);
+    document.addEventListener('mouseout', handleMouseOut);
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+
     return () => {
+      cancelAnimationFrame(raf);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseover', handleMouseOver);
       document.removeEventListener('mouseout', handleMouseOut);
-      cancelAnimationFrame(raf);
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
     };
   }, []);
 
-  // Don't render on mobile
-  if (typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches) {
-    return null;
-  }
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  if (isMobile) return null;
 
   return (
     <>
-      <div
-        ref={ringRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: 18,
-          height: 18,
-          border: '1.5px solid var(--gold)',
-          borderRadius: '50%',
-          pointerEvents: 'none',
-          zIndex: 9999,
-          transition: 'width 0.2s var(--ease-out-expo), height 0.2s var(--ease-out-expo), opacity 0.2s, border-color 0.2s, border-radius 0.2s',
-          willChange: 'transform',
-        }}
-      />
       <div
         ref={dotRef}
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
-          width: 4,
-          height: 4,
-          background: 'var(--gold-bright)',
+          width: 6,
+          height: 6,
           borderRadius: '50%',
+          background: 'var(--gold)',
+          transform: 'translate(-50%, -50%)',
           pointerEvents: 'none',
           zIndex: 9999,
-          willChange: 'transform',
+          transition: 'transform 0.15s ease',
+        }}
+      />
+      <div
+        ref={ringRef}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: 36,
+          height: 36,
+          borderRadius: '50%',
+          border: '1.5px solid var(--gold)',
+          opacity: 0.5,
+          transform: 'translate(-50%, -50%)',
+          pointerEvents: 'none',
+          zIndex: 9998,
+          transition: 'width 0.3s ease, height 0.3s ease, border-color 0.3s ease, opacity 0.3s ease, transform 0.15s ease',
         }}
       />
     </>

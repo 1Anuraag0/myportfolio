@@ -39,6 +39,17 @@ export default function GlobalLayers() {
 
   return (
     <>
+      {/* Layer 0 — Solid Background Color */}
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: -1,
+          pointerEvents: 'none',
+          background: 'linear-gradient(to bottom, #000000 0%, #170529 100%)',
+        }}
+      />
+
       {/* Layer 1 — Ikat Pattern */}
       <div
         style={{

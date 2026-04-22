@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh';
 import { fetchGitHubContributions, ContributionDay } from '../lib/github';
+
+// Inject BVH into Three.js core for accelerated raycasting
+THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
+THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+THREE.Mesh.prototype.raycast = acceleratedRaycast;
 
 interface GithubGardenCanvasProps {
   year: string;
@@ -185,6 +191,8 @@ export default function GithubGardenCanvas({ year, onDataLoaded }: GithubGardenC
     scene.add(ground);
 
     const barGeo = new THREE.BoxGeometry(cellSize, 1, cellSize, 1, 1, 1);
+    // Build BVH tree for accelerated raycasting against instanced meshes
+    barGeo.computeBoundsTree();
     const levels = [
       { min: 0, max: 0 },
       { min: 1, max: 2 },
@@ -273,7 +281,7 @@ export default function GithubGardenCanvas({ year, onDataLoaded }: GithubGardenC
       const geo = new THREE.BoxGeometry(fp.sx, fp.sy, fp.sz);
       const mesh = new THREE.Mesh(geo, frameMat);
       mesh.position.set(fp.px, fp.sy / 2 - 0.3, fp.pz);
-      mesh.castShadow = true;
+      mesh.castShadow = false; // PERF: Only mainLight casts shadows to reduce draw calls
       scene.add(mesh);
     });
 
@@ -295,7 +303,7 @@ export default function GithubGardenCanvas({ year, onDataLoaded }: GithubGardenC
       });
       const orn = new THREE.Mesh(ornGeo, ornMat);
       orn.position.set(pos[0], 0.3, pos[1]);
-      orn.castShadow = true;
+      orn.castShadow = false; // PERF: Decorative elements don't need shadow passes
       scene.add(orn);
       
       const ringGeo = new THREE.TorusGeometry(0.6, 0.06, 8, 32);
@@ -414,8 +422,16 @@ export default function GithubGardenCanvas({ year, onDataLoaded }: GithubGardenC
     controls.addEventListener('start', () => { isDragging = true; tooltip.style.display = 'none'; });
     controls.addEventListener('end', () => { isDragging = false; });
 
+    // Throttle raycasting to 15 FPS for tooltip hover detection
+    let lastRaycastTime = 0;
+    const RAYCAST_INTERVAL = 1000 / 15;
+
     const onPointerMove = (e: MouseEvent) => {
       if (isDragging) return;
+
+      const now = performance.now();
+      if (now - lastRaycastTime < RAYCAST_INTERVAL) return;
+      lastRaycastTime = now;
 
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
@@ -453,7 +469,18 @@ export default function GithubGardenCanvas({ year, onDataLoaded }: GithubGardenC
     const clock = new THREE.Clock();
     let animationFrameId: number;
 
+    let isVisible = true;
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+    }, { threshold: 0 });
+    observer.observe(root);
+
     function animate() {
+      if (!isVisible) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
+
       const t = clock.getElapsedTime();
       
       const positions = particles.geometry.attributes.position.array;
@@ -496,6 +523,7 @@ export default function GithubGardenCanvas({ year, onDataLoaded }: GithubGardenC
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
       resizeObserver.disconnect();
       renderer.domElement.removeEventListener('mousemove', onPointerMove);
       root.removeChild(renderer.domElement);
@@ -509,11 +537,21 @@ export default function GithubGardenCanvas({ year, onDataLoaded }: GithubGardenC
           if (child.geometry) child.geometry.dispose();
           if (child.material) {
             if (Array.isArray(child.material)) {
-              child.material.forEach(m => m.dispose());
+              child.material.forEach(m => {
+                // PERF: Dispose textures attached to materials (canvas textures from sprites)
+                if (m.map) m.map.dispose();
+                m.dispose();
+              });
             } else {
+              if ((child.material as any).map) (child.material as any).map.dispose();
               child.material.dispose();
             }
           }
+        }
+        // PERF: Dispose sprite materials + their canvas textures
+        if (child instanceof THREE.Sprite) {
+          if (child.material.map) child.material.map.dispose();
+          child.material.dispose();
         }
       });
     };

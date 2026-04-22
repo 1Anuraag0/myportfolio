@@ -169,6 +169,24 @@ export default function MandalaCanvas() {
       document.removeEventListener('visibilitychange', handleVisibility);
       window.removeEventListener('resize', handleResize);
       container.removeEventListener('mousemove', handleMouse);
+
+      /**
+       * PERF: Dispose all GPU resources held by Three.js objects.
+       * Without this, geometries/materials leak VRAM on component unmount.
+       */
+      scene.traverse((child) => {
+        if (child instanceof THREE.Points || child instanceof THREE.Mesh) {
+          if (child.geometry) child.geometry.dispose();
+          if (child.material) {
+            if (Array.isArray(child.material)) {
+              child.material.forEach((m) => m.dispose());
+            } else {
+              child.material.dispose();
+            }
+          }
+        }
+      });
+
       renderer.dispose();
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);

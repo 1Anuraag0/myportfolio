@@ -1,109 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import OrnamentDivider from '../components/OrnamentDivider';
-import { fetchGitHubData, type GitHubUser } from '../lib/github';
+import ProfileCard from '../components/ProfileCard';
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface StatCardProps {
-  value: string;
-  label: string;
-  animate?: boolean;
-}
-
-function StatCard({ value, label, animate }: StatCardProps) {
-  const valueRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!animate || !valueRef.current) return;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reducedMotion) return;
-
-    const numVal = parseInt(value, 10);
-    if (isNaN(numVal)) return;
-
-    gsap.from(valueRef.current, {
-      textContent: 0,
-      duration: 2,
-      ease: 'power2.out',
-      snap: { textContent: 1 },
-      scrollTrigger: { trigger: valueRef.current, start: 'top 80%', once: true },
-    });
-  }, [value, animate]);
-
-  return (
-    <div
-      data-cursor="expand"
-      style={{
-        border: '1px solid var(--gold-border)',
-        background: 'var(--gold-dim)',
-        padding: '28px 24px',
-        position: 'relative',
-        transition: 'border-color 0.35s, background 0.35s, transform 0.35s',
-        cursor: 'none',
-      }}
-      onMouseEnter={(e) => {
-        const el = e.currentTarget;
-        el.style.borderColor = 'var(--gold)';
-        el.style.background = 'rgba(201, 162, 39, 0.09)';
-        el.style.transform = 'translateY(-6px)';
-        el.style.boxShadow = '0 24px 60px rgba(201, 162, 39, 0.08)';
-      }}
-      onMouseLeave={(e) => {
-        const el = e.currentTarget;
-        el.style.borderColor = 'var(--gold-border)';
-        el.style.background = 'var(--gold-dim)';
-        el.style.transform = 'translateY(0)';
-        el.style.boxShadow = 'none';
-      }}
-    >
-      {/* Corner ornaments */}
-      <span style={{ position: 'absolute', top: -1, left: -1, width: 12, height: 12, borderTop: '2px solid var(--gold)', borderLeft: '2px solid var(--gold)' }} />
-      <span style={{ position: 'absolute', bottom: -1, right: -1, width: 12, height: 12, borderBottom: '2px solid var(--gold)', borderRight: '2px solid var(--gold)' }} />
-      <span style={{ position: 'absolute', top: -1, right: -1, width: 12, height: 12, borderTop: '2px solid var(--gold)', borderRight: '2px solid var(--gold)' }} />
-      <span style={{ position: 'absolute', bottom: -1, left: -1, width: 12, height: 12, borderBottom: '2px solid var(--gold)', borderLeft: '2px solid var(--gold)' }} />
-
-      <div
-        ref={valueRef}
-        style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 52,
-          lineHeight: 1,
-          color: 'var(--gold)',
-        }}
-      >
-        {value}
-      </div>
-      <div
-        style={{
-          fontFamily: 'var(--font-sans)',
-          fontSize: 10,
-          letterSpacing: '0.35em',
-          textTransform: 'uppercase' as const,
-          color: 'var(--ivory-dim)',
-          marginTop: 8,
-        }}
-      >
-        {label}
-      </div>
-    </div>
-  );
-}
-
 export default function About() {
-  const [user, setUser] = useState<GitHubUser | null>(null);
-  const [loading, setLoading] = useState(true);
   const leftRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    fetchGitHubData()
-      .then(({ user }) => {
-        setUser(user);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -122,14 +26,7 @@ export default function About() {
         scrollTrigger: { trigger: '#about', start: 'top 70%' },
       }
     );
-  }, [loading]);
-
-  const stats = [
-    { value: loading ? '...' : String(user?.public_repos ?? 0), label: 'GitHub Repos', animate: true },
-    { value: '3+', label: 'Years Building', animate: false },
-    { value: '∞', label: 'Curiosity', animate: false },
-    { value: '01', label: 'Creative Vision', animate: false },
-  ];
+  }, []);
 
   return (
     <section
@@ -200,27 +97,38 @@ export default function About() {
             </p>
           </div>
 
-          {/* Right — stats */}
+          {/* Right — profile card */}
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 24,
-              alignContent: 'start',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
             }}
           >
-            {loading ? (
-              Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="skeleton" style={{ height: 140 }} />
-              ))
-            ) : (
-              stats.map((s, i) => <StatCard key={i} {...s} />)
-            )}
+            <ProfileCard
+              avatarUrl="/pic.png"
+              miniAvatarUrl="/pic.png"
+              iconUrl=""
+              grainUrl=""
+              name="Anurag"
+              title="Developer & Creator"
+              handle="aaaanuraggg"
+              status="Building"
+              contactText="Contact"
+              contactOptions={[
+                { label: 'LinkedIn', url: 'https://www.linkedin.com/in/anuragdolui' },
+                { label: 'Instagram', url: 'https://www.instagram.com/aaaanuraggg/' }
+              ]}
+              className="about-profile-card"
+            />
           </div>
         </div>
       </div>
 
       <style>{`
+        .about-profile-card {
+          width: min(100%, 420px);
+        }
         @media (max-width: 767px) {
           .about-grid {
             grid-template-columns: 1fr !important;

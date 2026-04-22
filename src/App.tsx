@@ -11,7 +11,7 @@ import Footer from './components/Footer';
 import Hero from './sections/Hero';
 import About from './sections/About';
 import Projects from './sections/Projects';
-import GithubGardenSection from './sections/GithubGardenSection';
+
 import Skills from './sections/Skills';
 import Contact from './sections/Contact';
 
@@ -21,12 +21,11 @@ const BG_COLORS = [
   '#07030F', // hero
   '#180910', // about
   '#0D0520', // projects
-  '#0A0A0F', // garden
   '#130728', // skills
   '#180910', // contact
 ];
 
-const SECTION_IDS = ['#hero', '#about', '#projects', '#garden', '#skills', '#contact'];
+const SECTION_IDS = ['#hero', '#about', '#projects', '#skills', '#contact'];
 
 export default function App() {
   useEffect(() => {
@@ -66,7 +65,6 @@ export default function App() {
       <Marquee />
       <About />
       <Projects />
-      <GithubGardenSection />
       <Skills />
       <Contact />
       <Footer />

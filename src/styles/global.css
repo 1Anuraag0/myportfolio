@@ -18,7 +18,7 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  cursor: none;
+
   overflow-x: hidden;
 }
 
@@ -45,7 +45,7 @@ img {
   position: relative;
   overflow: hidden;
   transition: color 0.38s var(--ease-out-expo);
-  cursor: none;
+  cursor: pointer;
 }
 
 .btn::before {
@@ -241,9 +241,6 @@ img {
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 767px) {
-  body {
-    cursor: auto;
-  }
   .section-title {
     font-size: clamp(32px, 8vw, 48px);
   }

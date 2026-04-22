@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import MandalaCanvas from '../components/MandalaCanvas';
+import FaultyTerminal from '../components/FaultyTerminal';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -33,7 +33,7 @@ export default function Hero() {
       opacity: 0,
       scrollTrigger: { trigger: '#hero', start: 'top top', end: '40% top', scrub: 1 },
     });
-    gsap.to('.mandala-canvas', {
+    gsap.to('.faulty-terminal-bg', {
       opacity: 0,
       scrollTrigger: { trigger: '#hero', start: '10% top', end: '60% top', scrub: 0.8 },
     });
@@ -60,7 +60,38 @@ export default function Hero() {
         overflow: 'hidden',
       }}
     >
-      <MandalaCanvas />
+      {/* FaultyTerminal background — gold-tinted matrix effect */}
+      <div
+        className="faulty-terminal-bg"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          zIndex: 0,
+          opacity: 0.4,
+          pointerEvents: 'none',
+        }}
+      >
+        <FaultyTerminal
+          scale={1.5}
+          gridMul={[2, 1]}
+          digitSize={1.2}
+          timeScale={0.3}
+          pause={false}
+          scanlineIntensity={0.4}
+          glitchAmount={0.6}
+          flickerAmount={0.5}
+          noiseAmp={0.8}
+          chromaticAberration={0}
+          dither={0}
+          curvature={0.05}
+          tint="#C9A227"
+          mouseReact={true}
+          mouseStrength={0.3}
+          pageLoadAnimation={true}
+          brightness={0.7}
+          style={{ pointerEvents: 'auto' }}
+        />
+      </div>
 
       <div
         className="hero-content"

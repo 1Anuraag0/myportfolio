@@ -22,6 +22,7 @@
     "@fontsource/noto-serif": "^5.2.5",
     "@studio-freight/lenis": "^1.0.42",
     "gsap": "^3.12.0",
+    "ogl": "^1.0.11",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "three": "^0.183.2",

@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import GlobalLayers from './components/GlobalLayers';
-import Cursor from './components/Cursor';
+
 import Nav from './components/Nav';
 import Marquee from './components/Marquee';
 import Footer from './components/Footer';
@@ -60,7 +60,7 @@ export default function App() {
   return (
     <>
       <GlobalLayers />
-      <Cursor />
+
       <Nav />
       <Hero />
       <Marquee />

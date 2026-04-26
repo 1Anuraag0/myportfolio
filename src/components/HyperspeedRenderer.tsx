@@ -936,6 +936,7 @@ class App {
   speedUp: number;
   timeOffset: number;
   hasValidSize: boolean;
+  isVisible: boolean;
 
   constructor(container: HTMLElement, options: HyperspeedOptions) {
     this.options = options;
@@ -947,6 +948,7 @@ class App {
     }
     this.container = container;
     this.hasValidSize = false;
+    this.isVisible = true;
 
     const initW = Math.max(1, container.offsetWidth);
     const initH = Math.max(1, container.offsetHeight);
@@ -1258,7 +1260,7 @@ class App {
       }
     }
 
-    if (this.hasValidSize) {
+    if (this.hasValidSize && this.isVisible) {
       const delta = this.clock.getDelta();
       this.render(delta);
       this.update(delta);
@@ -1302,7 +1304,16 @@ const Hyperspeed: FC<HyperspeedProps> = ({ effectOptions = DEFAULT_EFFECT_OPTION
     appRef.current = myApp;
     myApp.loadAssets().then(myApp.init);
 
+    const observer = new IntersectionObserver((entries) => {
+      if (appRef.current) {
+        appRef.current.isVisible = entries[0].isIntersecting;
+      }
+    }, { threshold: 0 });
+    
+    observer.observe(container);
+
     return () => {
+      observer.disconnect();
       if (appRef.current) {
         appRef.current.dispose();
       }

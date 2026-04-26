@@ -219,15 +219,7 @@ img {
   }
 }
 
-/* ─── MANDALA SPIN ─── */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+
 
 /* ─── REDUCED MOTION ─── */
 @media (prefers-reduced-motion: reduce) {

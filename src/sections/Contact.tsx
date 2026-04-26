@@ -33,20 +33,22 @@ export default function Contact() {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reducedMotion) return;
 
-    gsap.fromTo(
-      '.contact-content > *',
-      { opacity: 0, y: 40 },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.15,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: '#contact', start: 'top 70%' },
-      }
-    );
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.contact-content > *',
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: 0.15,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: '#contact', start: 'top 70%', once: true },
+        }
+      );
+    });
 
-
+    return () => ctx.revert();
   }, []);
 
   return (

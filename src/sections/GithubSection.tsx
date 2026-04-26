@@ -216,9 +216,7 @@ export default function GithubSection() {
       <div
         className="gh-card"
         style={{
-          background: 'rgba(255, 255, 255, 0.02)',
-          backdropFilter: 'blur(24px) saturate(150%)',
-          WebkitBackdropFilter: 'blur(24px) saturate(150%)',
+          background: 'rgba(20, 20, 25, 0.95)',
           padding: 'clamp(20px, 4vw, 32px)',
           borderRadius: 20,
           boxShadow:
@@ -227,6 +225,7 @@ export default function GithubSection() {
           maxWidth: 1100,
           margin: '0 auto',
           opacity: 0,
+          willChange: 'transform, opacity',
         }}
       >
         {/* Card Header */}

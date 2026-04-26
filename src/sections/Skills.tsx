@@ -14,29 +14,34 @@ function SkillCategory({ title, skills }: { title: string; skills: string[] }) {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reducedMotion) return;
 
-    if (titleRef.current) {
-      ScrollTrigger.create({
-        trigger: titleRef.current,
-        start: 'top 80%',
-        onEnter: () => titleRef.current?.classList.add('visible'),
-      });
-    }
+    const ctx = gsap.context(() => {
+      if (titleRef.current) {
+        ScrollTrigger.create({
+          trigger: titleRef.current,
+          start: 'top 80%',
+          once: true,
+          onEnter: () => titleRef.current?.classList.add('visible'),
+        });
+      }
 
-    if (pillsRef.current) {
-      const pills = pillsRef.current.querySelectorAll('.skill-pill');
-      gsap.fromTo(
-        pills,
-        { scale: 0.78, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          stagger: 0.055,
-          ease: 'back.out(1.4)',
-          duration: 0.6,
-          scrollTrigger: { trigger: pillsRef.current, start: 'top 78%' },
-        }
-      );
-    }
+      if (pillsRef.current) {
+        const pills = pillsRef.current.querySelectorAll('.skill-pill');
+        gsap.fromTo(
+          pills,
+          { scale: 0.78, opacity: 0 },
+          {
+            scale: 1,
+            opacity: 1,
+            stagger: 0.055,
+            ease: 'back.out(1.4)',
+            duration: 0.6,
+            scrollTrigger: { trigger: pillsRef.current, start: 'top 78%', once: true },
+          }
+        );
+      }
+    });
+
+    return () => ctx.revert();
   }, [skills]);
 
   return (

@@ -13,19 +13,25 @@ export default function About() {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reducedMotion || !leftRef.current) return;
 
-    const paragraphs = leftRef.current.querySelectorAll('.about-paragraph');
-    gsap.fromTo(
-      paragraphs,
-      { opacity: 0, x: -44 },
-      {
-        opacity: 1,
-        x: 0,
-        stagger: 0.22,
-        ease: 'power3.out',
-        duration: 1,
-        scrollTrigger: { trigger: '#about', start: 'top 70%' },
+    const ctx = gsap.context(() => {
+      const paragraphs = leftRef.current?.querySelectorAll('.about-paragraph');
+      if (paragraphs && paragraphs.length > 0) {
+        gsap.fromTo(
+          paragraphs,
+          { opacity: 0, x: -44 },
+          {
+            opacity: 1,
+            x: 0,
+            stagger: 0.22,
+            ease: 'power3.out',
+            duration: 1,
+            scrollTrigger: { trigger: '#about', start: 'top 70%', once: true },
+          }
+        );
       }
-    );
+    });
+
+    return () => ctx.revert();
   }, []);
 
   return (

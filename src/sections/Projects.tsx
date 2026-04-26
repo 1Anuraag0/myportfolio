@@ -185,20 +185,26 @@ export default function Projects() {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reducedMotion) return;
 
-    const cards = gridRef.current.querySelectorAll('.project-card');
-    gsap.fromTo(
-      cards,
-      { opacity: 0, y: 64, rotation: 1.5 },
-      {
-        opacity: 1,
-        y: 0,
-        rotation: 0,
-        duration: 0.9,
-        ease: 'power3.out',
-        stagger: 0.1,
-        scrollTrigger: { trigger: gridRef.current, start: 'top 75%' },
+    const ctx = gsap.context(() => {
+      const cards = gridRef.current?.querySelectorAll('.project-card');
+      if (cards && cards.length > 0) {
+        gsap.fromTo(
+          cards,
+          { opacity: 0, y: 64, rotation: 1.5 },
+          {
+            opacity: 1,
+            y: 0,
+            rotation: 0,
+            duration: 0.9,
+            ease: 'power3.out',
+            stagger: 0.1,
+            scrollTrigger: { trigger: gridRef.current, start: 'top 75%', once: true },
+          }
+        );
       }
-    );
+    });
+
+    return () => ctx.revert();
   }, [loading]);
 
   return (

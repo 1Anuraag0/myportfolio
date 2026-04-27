@@ -113,7 +113,7 @@ export default function Contact() {
 
         {/* CTA */}
         <a
-          href="mailto:anuragdolui@gmail.com"
+          href="mailto:anuragdolui46@gmail.com"
           className="btn btn-gold"
           data-cursor="expand"
           style={{ margin: '40px auto', display: 'inline-block' }}

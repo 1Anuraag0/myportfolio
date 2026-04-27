@@ -114,8 +114,6 @@ export default function About() {
             <ProfileCard
               avatarUrl="/pic.png"
               miniAvatarUrl="/pic.png"
-              iconUrl=""
-              grainUrl=""
               name="Anurag"
               title="Developer & Creator"
               handle="aaaanuraggg"

@@ -193,9 +193,9 @@ export default function GithubSection() {
       id="github"
       ref={sectionRef}
       style={{
-        padding: 'clamp(80px, 12vw, 140px) clamp(24px, 5vw, 80px)',
+        padding: 'clamp(80px, 12vw, 140px) 0', /* Removed side padding since width is fluid inside */
         position: 'relative',
-        overflow: 'hidden',
+        overflow: 'clip', /* Faster than hidden */
       }}
     >
       {/* Section Header */}
@@ -216,13 +216,13 @@ export default function GithubSection() {
       <div
         className="gh-card"
         style={{
-          background: 'rgba(20, 20, 25, 0.95)',
+          background: 'color-mix(in srgb, #141419 95%, transparent 5%)', /* Modern color mixing */
           padding: 'clamp(20px, 4vw, 32px)',
           borderRadius: 20,
           boxShadow:
             '0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(255, 255, 255, 0.02)',
           border: '1px solid rgba(201, 162, 39, 0.15)',
-          maxWidth: 1100,
+          width: 'min(1100px, calc(100vw - 48px))', /* Fluid width without media queries! */
           margin: '0 auto',
           opacity: 0,
           willChange: 'transform, opacity',
@@ -231,11 +231,10 @@ export default function GithubSection() {
         {/* Card Header */}
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1fr) auto', /* Prevents blowout if name is too long */
+            alignItems: 'end',
             marginBottom: 24,
-            flexWrap: 'wrap',
             gap: 16,
           }}
         >
@@ -473,31 +472,31 @@ export default function GithubSection() {
         .gh-cell:hover {
           transform: scale(1.8) translateZ(10px);
           z-index: 20;
-          filter: brightness(1.3);
+          filter: brightness(1.2);
           border-color: rgba(255, 255, 255, 0.8);
-          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
         }
 
         /* Neon Green Glow Levels */
         .gh-level-1 {
           background-color: #14532d;
           border-color: #14532d;
-          box-shadow: 0 0 6px rgba(20, 83, 45, 0.8);
+          box-shadow: 0 0 6px rgba(20, 83, 45, 0.4);
         }
         .gh-level-2 {
           background-color: #16a34a;
           border-color: #16a34a;
-          box-shadow: 0 0 10px rgba(22, 163, 74, 0.8);
+          box-shadow: 0 0 8px rgba(22, 163, 74, 0.5);
         }
         .gh-level-3 {
           background-color: #22c55e;
-          border-color: rgba(255, 255, 255, 0.3);
-          box-shadow: 0 0 15px rgba(34, 197, 94, 0.9), inset 0 0 2px rgba(255, 255, 255, 0.5);
+          border-color: rgba(255, 255, 255, 0.2);
+          box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
         }
         .gh-level-4 {
           background-color: #4ade80;
-          border-color: rgba(255, 255, 255, 0.6);
-          box-shadow: 0 0 20px rgba(74, 222, 128, 1), 0 0 40px rgba(74, 222, 128, 0.4), inset 0 0 4px rgba(255, 255, 255, 0.8);
+          border-color: rgba(255, 255, 255, 0.4);
+          box-shadow: 0 0 12px rgba(74, 222, 128, 0.7);
         }
 
         /* Legend cells */

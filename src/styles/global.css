@@ -8,6 +8,10 @@
   box-sizing: border-box;
 }
 
+:root {
+  color-scheme: dark; /* Automatically styles native scrollbars and inputs to dark theme! */
+}
+
 html {
   scroll-behavior: auto; /* Lenis handles smooth scroll */
 }
@@ -19,7 +23,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  overflow-x: hidden;
+  overflow-x: clip; /* clip is faster than hidden because it prevents programmatic scroll */
 }
 
 a {
@@ -63,12 +67,14 @@ img {
 }
 .btn-gold::before {
   background: var(--gold);
+  transition: background 0.3s var(--ease-out-expo), transform 0.42s var(--ease-out-expo);
 }
 .btn-gold:hover {
   color: var(--ink);
 }
 .btn-gold:hover::before {
   transform: translateX(0);
+  background: color-mix(in srgb, var(--gold) 85%, white 15%); /* Adds shine dynamically */
 }
 
 .btn-saffron {
@@ -77,12 +83,14 @@ img {
 }
 .btn-saffron::before {
   background: var(--saffron);
+  transition: background 0.3s var(--ease-out-expo), transform 0.42s var(--ease-out-expo);
 }
 .btn-saffron:hover {
   color: var(--ivory);
 }
 .btn-saffron:hover::before {
   transform: translateX(0);
+  background: color-mix(in srgb, var(--saffron) 85%, white 15%); /* Adds shine dynamically */
 }
 
 /* ─── ORNAMENT DIVIDER ─── */
@@ -264,10 +272,9 @@ img {
   right: 24px;
   padding: 24px;
   pointer-events: none;
-  background: rgba(10, 10, 15, 0.75);
+  background: rgba(10, 10, 15, 0.95);
   border: 1px solid rgba(201, 162, 39, 0.2);
   border-radius: 12px;
-  backdrop-filter: blur(12px);
   min-width: 240px;
   color: white;
   z-index: 10;
